@@ -5,9 +5,11 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false,
             unique: true,
         },
+    },{
+        timestamps: false,
     });
     Category.associate = function (models) {
-        Category.hasMany(models.Items);
+        Category.hasMany(models.Item)
     };
     return Category;
 };

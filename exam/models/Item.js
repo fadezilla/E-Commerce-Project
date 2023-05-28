@@ -12,9 +12,14 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.DataTypes.INTEGER,
             allowNull: false,
         },
+        SKU: {
+            type: Sequelize.DataTypes.STRING,
+            allowNull: false,
+            unique: true,
+        },
     });
     Item.associate = function (models) {
-        Item.belongsTo(models.Category);
+        Item.belongsTo(models.Category, { foreignKey: 'CategoryId' });
         Item.belongsToMany(models.Cart, { through: models.CartItem });
         Item.belongsToMany(models.Order, { through: models.OrderItem });
     };
