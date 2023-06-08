@@ -36,13 +36,8 @@ router.get('/cart', authentication, async(req, res, next)=> {
     }
 });
 
-router.get('/allcarts', authentication, async (req, res, next)=> {
+router.get('/allcarts', authentication, isAdmin, async (req, res, next)=> {
     try{
-        const { id: userId } = req.user;
-        const user = await userService.getOneUser(userId);
-        if(!user || user.RoleId !== 1) {
-            return res.status(403).json({ error: 'Access denied. Only logged in Admin can view this page.'});
-        }
         const allCarts = await cartService.getAll();
         res.json(allCarts);
     } catch (error) {

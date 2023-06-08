@@ -10,7 +10,8 @@ const isAdmin = require('../public/javascripts/isAdmin');
 router.get('/items', async (req, res, next) => {
     try {
         const items = await itemService.getAll();
-        res.json({ items });
+        const ifNoQuantity = items.filter(item => item.StockQuantity > 0);
+        res.json({ items: ifNoQuantity });
     } catch (error) {
         console.error('Items get error', error);
         res.status(500).json({ error: 'Failed to get items. '});
