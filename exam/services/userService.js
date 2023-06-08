@@ -5,19 +5,51 @@ class UserService {
         this.Role = db.Role;
     }
 
-    async getOne(userName) {
+    async getOne(email) {
         return this.User.findOne({
-            where: { UserName: userName}
+            where: { Email: email}
         });
     }
 
-    async create(userName, email, encryptedPassword, salt, roleName) {
+    async getEmail(userId){
+        const user = await this.User.findOne({
+            where: { id: userId },
+        });
+
+        if(!user){
+            throw new Error('User not found');
+        }
+
+        return user.Email;
+    }
+
+    async getEmailCount(email){
+        return this.User.count({
+            where: { Email: email },
+        });
+    }
+
+    async getOneByUsername(username){
+        return this.User.findOne({
+            where: { Username: username },
+        });
+    }
+
+    async getOneUser(userId){
+        return this.User.findOne({
+            where: { Id: userId}
+        });
+    }
+
+    async create(firstName, lastName, name, email, encryptedPassword, salt, roleName) {
         const role = await this.Role.findOne({
             where: { Name: roleName }
         });
-
+        
         return this.User.create({
-            UserName: userName,
+            FirstName: firstName,
+            LastName: lastName,
+            UserName: name,
             Email: email,
             EncryptedPassword: encryptedPassword,
             Salt: salt,
@@ -25,9 +57,9 @@ class UserService {
         });
     }
 
-    async delete(userName) {
+    async delete(username) {
         return this.User.destroy({
-            where: { UserName: userName}
+            where: { UserName: username}
         })
     }
 }

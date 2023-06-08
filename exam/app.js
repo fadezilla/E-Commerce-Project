@@ -1,14 +1,19 @@
 require('dotenv').config();
+const debug = require('debug')('app');
+debug('TOKEN_SECRET:', process.env.TOKEN_SECRET);
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var setupRouter = require('./routes/setup')
+var authRouter = require('./routes/auth')
 var searchRouter = require('./routes/search');
+var categoryRouter = require('./routes/category');
+var itemRouter = require('./routes/items');
+var cartRouter = require('./routes/cart');
+var orderRouter = require('./routes/order');
 
 var db = require('./models');
 db.sequelize.sync({ force: false });
@@ -25,10 +30,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/', authRouter);
 app.use('/users', usersRouter);
-app.use('/setup', setupRouter);
-
+app.use('/search', searchRouter);
+app.use('/', categoryRouter);
+app.use('/', itemRouter);
+app.use('/', cartRouter);
+app.use('/', orderRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

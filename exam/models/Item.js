@@ -1,5 +1,10 @@
 module.exports = (sequelize, Sequelize) => {
     const Item = sequelize.define('Item', {
+        id: {
+            type: Sequelize.DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
+        },
         Name: {
             type: Sequelize.DataTypes.STRING,
             allowNull: false,
@@ -17,11 +22,16 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false,
             unique: true,
         },
+        CategoryName: {
+            type: Sequelize.DataTypes.STRING,
+            allowNull: false,
+            unique: false,
+        }
     });
     Item.associate = function (models) {
-        Item.belongsTo(models.Category, { foreignKey: 'CategoryId' });
-        Item.belongsToMany(models.Cart, { through: models.CartItem });
-        Item.belongsToMany(models.Order, { through: models.OrderItem });
+        Item.belongsTo(models.Category);
+        Item.hasMany(models.CartItems);
+        Item.hasMany(models.OrderItems);
     };
     return Item;
 };
