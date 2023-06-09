@@ -4,6 +4,8 @@ const app = require('../app');
 const ItemService = require('../services/itemService');
 const itemService = new ItemService(db);
 
+//4 of these tests will need a a fresh database, if not the POST /setup, POST /order/:id, GET /allcarts, DELETE /deleteuser will get an error
+
 test('POST /setup, Should populate the database', async () => {
     const response = await request(app).post('/setup');
     expect(response.status).toBe(200);
