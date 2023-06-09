@@ -42,6 +42,11 @@ router.put('/item/:id', authentication, isAdmin, async (req, res, next)=> {
     const itemId = req.params.id;
     const { name, price, stockQuantity, SKU, categoryName } = req.body;
     try {
+        const existingItem = await itemService.getItem(itemId);
+        if(!existingItem) {
+            return res.status(404).json({error: 'Item not found'});
+        }
+        
         const result = await itemService.update(itemId, name, price, stockQuantity, SKU, categoryName);
         if (result === 0){
             return res.status(404).json({ error: 'Item not found.'});

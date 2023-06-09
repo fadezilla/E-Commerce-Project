@@ -9,6 +9,9 @@ const itemService = new ItemService(db);
 
 router.post('/', async (req, res, next) => {
     const {searchItem, searchCategory, searchSku, searchPriceRange } = req.body;
+    if (!searchItem && !searchCategory && !searchSku && !searchPriceRange) {
+        return res.status(400).json({ error: 'Please provide at least one or more search parameters such as "searchItem", "searchCategory", "searchSku" or "searchPriceRange".' });
+    }
 
     try {
         const searchWhere = {};
